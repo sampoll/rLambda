@@ -1,0 +1,76 @@
+---
+title: "rLambda -- run a R script on AWS Lambda"
+author: "Sam"
+date: "`r format(Sys.time(),'%B, %d, %Y')`"
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The AWS Lambda function is registered for use by our group account. By default, 
+AWS will look for credentials in the file `~/.aws/credentials`. This default 
+can be overridden by setting environment variables `AWS_ACCESS_KEY_ID` and  
+`AWS_SECRET_ACCESS_KEY`. 
+
+The package uses the local directory for temporary file storage. It is recommended
+that the user make an empty temporary directory to run in.
+
+```{r}
+# system("mkdir -p /tmp/testdir")
+# setwd("/tmp/testdir")
+# closeAllConnections()    # a wise precaution
+```
+
+Initialize python with the path to the desired python executable.
+
+```{r}
+library(rLambda)
+rLambdaInitialize(path="/anaconda3/bin/python")
+```
+
+rLambda runs the no-parameter function `run()` in the current environment,
+and assign the return value to `result`. 
+
+This means the user should:
+
+* Define a `run` function that takes no parameters.
+* Avoid defining objects in the environment that `run` does not use.
+* Design `run` to return an object and/or to assign objects to its enclosing environment.
+* Avoid using the name `result` for an object that should not be overwritten.
+
+```{r}
+rm(list=ls())            # clean up
+df <- data.frame(x = 1:10, y = 1:10 + rnorm(n=10))
+run <- function()  {
+  lm(y ~ x, df)
+}
+rLambdaExecute()
+```
+
+If no error occurs, there should be a `result` object in the local environment. 
+However, this is not working at the moment, for reasons not yet understood. So 
+we can load and use the response with:
+
+```{r}
+# load("newdata.Rdata")
+# summary(result)
+```
+
+When the result has been used/saved, it may be a good idea to clean up, to prevent
+leaving things in the execution directory that may interfere with subsequent 
+executions.
+
+```{r}
+# setwd("~")
+# system("rm -Rf /tmp/tempdir")
+```
+
+
+
+
+
+
+
+
