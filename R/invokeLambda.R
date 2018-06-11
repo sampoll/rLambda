@@ -90,32 +90,3 @@ rLambdaExecute <- function()  {
 
 }
 
-
-
-
-
-# For vignette
-
-# Start with a clean environment, because everything is sent
-# to Lambda in one Base64 string.
-#    rm(list=ls())
-#    closeAllConnections()
-
-# By convention, r-lambda runs the function run() once
-# and returns everything in the environment.
-#    df <- data.frame(x = 1:10, y = 1:10 + rnorm(n=10))
-#    run <- function()  {
-#      lm(x ~ y, df)
-#    }
-
-
-
-
-
-
-
-
-
-
-
-
