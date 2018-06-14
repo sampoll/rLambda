@@ -6,22 +6,18 @@
 \usage{
 rLambdaExecute()
 }
-\arguments{
-\item{jsonin}{A JSON file with the input to the Lambda function}
-
-\item{lambdafname}{The name of the Lambda function}
-}
-\value{
-A list with the response key-value pairs.
-}
 \description{
 Invoke a AWS Lambda function
 }
 \details{
-The Lambda function must be already created. The user's 
-default credentials will be used to certify the user's
-permission to invoke the function. Input should be 
-passed by means of a file with JSON content. This 
-content will be sent to the Lambda function's 
-\code{event} parameter.
+This functon has no parameters. The entire local environment will be sent 
+to the R server. The local environment should have a no-parameter function 
+called \code{run}. This function will be run, and it's return value will be
+placed in the local environment with name \code{result}. Additionally, 
+any variables the \code{run()} function assigns to the enclosing 
+environment will be present when \code{rLambdaExecute} returns.
+
+(Note: this functionality is not working, for reasons still to be 
+clarified. To get the final environment, it is necessary to 
+execute \code{load("newdata.Rdata")}.)
 }
